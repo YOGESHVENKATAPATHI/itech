@@ -189,106 +189,7 @@ and dependencies (minified).
 		    /* 
 			keyboard scrolling
 			*/
-		    keyboard: {
-		        /*
-				enable scrolling via keyboard
-				values: boolean
-				*/
-		        enable: true,
-		        /*
-				keyboard scrolling type 
-				values (string): "stepless", "stepped"
-				*/
-		        scrollType: "stepless",
-		        /*
-				scrolling amount in pixels
-				values: "auto", integer 
-				*/
-		        scrollAmount: "auto"
-		    },
-		    /*
-			enable content touch-swipe scrolling 
-			values: boolean, integer, string (number)
-			integer values define the axis-specific minimum amount required for scrolling momentum
-			*/
-		    contentTouchScroll: 25,
-		    /*
-			advanced option parameters
-			*/
-		    advanced: {
-		        /*
-				auto-expand content horizontally (for "x" or "yx" axis) 
-				values: boolean
-				*/
-		        autoExpandHorizontalScroll: false,
-		        /*
-				auto-scroll to elements with focus
-				*/
-		        autoScrollOnFocus: "input,textarea,select,button,datalist,keygen,a[tabindex],area,object,[contenteditable='true']",
-		        /*
-				auto-update scrollbars on content, element or viewport resize 
-				should be true for fluid layouts/elements, adding/removing content dynamically, hiding/showing elements, content with images etc. 
-				values: boolean
-				*/
-		        updateOnContentResize: true,
-		        /*
-				auto-update scrollbars each time each image inside the element is fully loaded 
-				values: boolean
-				*/
-		        updateOnImageLoad: true,
-		        /*
-				auto-update scrollbars based on the amount and size changes of specific selectors 
-				useful when you need to update the scrollbar(s) automatically, each time a type of element is added, removed or changes its size 
-				values: boolean, string (e.g. "ul li" will auto-update scrollbars each time list-items inside the element are changed) 
-				a value of true (boolean) will auto-update scrollbars each time any element is changed
-				*/
-		        updateOnSelectorChange: false
-		    },
-		    /* 
-			scrollbar theme 
-			values: string 
-			ready-to-use themes: "light", "dark", "light-2", "dark-2", "light-3", "dark-3", "light-thick", "dark-thick", "light-thin", "dark-thin", 
-			"rounded", "rounded-dark", "rounded-dots", "rounded-dots-dark", "3d", "3d-dark", "3d-thick", "3d-thick-dark", "minimal", "minimal-dark", 
-			"inset", "inset-dark", "inset-2", "inset-2-dark", "inset-3", "inset-3-dark"
-			*/
-		    theme: "light",
-		    /*
-			user defined callback functions
-			*/
-		    callbacks: {
-		        /*
-				function to call when a scroll event starts 
-				values (function): function(){}
-				*/
-		        onScrollStart: false,
-		        /*
-				function to call when a scroll event is complete 
-				values (function): function(){}
-				*/
-		        onScroll: false,
-		        /*
-				function to call when a scroll event is complete and content is scrolled all the way to the end (bottom/right)
-				values (function): function(){}
-				*/
-		        onTotalScroll: false,
-		        /*
-				function to call when a scroll event is complete and content is scrolled back to the beginning (top/left)
-				values (function): function(){}
-				*/
-		        onTotalScrollBack: false,
-		        /*
-				function to call when a scroll event is running 
-				values (function): function(){}
-				*/
-		        whileScrolling: false,
-		        /*
-				onTotalScroll offset value
-				values: integer (pixels)
-				*/
-		        onTotalScrollOffset: 0,
-		        /*
-				onTotalScrollBack offset value
-				values: integer (pixels)
+		    k
 				*/
 		        onTotalScrollBackOffset: 0,
 		        /*
@@ -319,22 +220,7 @@ and dependencies (minified).
 		liveTimers = {}, /* live option timers */
 		/* live option timers removal */
 		removeLiveTimers = function (selector) {
-		    if (liveTimers[selector]) {
-		        clearTimeout(liveTimers[selector]);
-		        functions._delete.call(null, liveTimers[selector]);
-		    }
-		},
-		oldIE = (window.attachEvent && !window.addEventListener) ? 1 : 0, /* detect IE < 9 */
-		touchActive = false, /* global touch state (for touch and pointer events) */
-
-
-
-
-
-	/* 
-	----------------------------------------
-	METHODS 
-	----------------------------------------
+		    if (liveTimers[selector
 	*/
 
 		methods = {
@@ -2064,5 +1950,6 @@ and dependencies (minified).
     $(window).load(function () {
         $(defaultSelector)[pluginNS](); /* add scrollbars automatically on default selector */
     });
+
 
 })(jQuery, window, document);
