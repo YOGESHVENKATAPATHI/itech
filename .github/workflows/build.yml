@@ -1,4 +1,4 @@
-name: Build, test, coverage and SonarQube
+name: Build and analyze
 
 on:
   push:
@@ -11,91 +11,46 @@ jobs:
   build:
     name: Build, test and SonarQube
     runs-on: ubuntu-latest
-    # If you store secrets in an environment, uncomment the next line and ensure the environment exists
+    # If you use environment secrets, uncomment the next line:
     environment: sonaritech
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Show tracked files (debug)
-        run: |
-          echo "=== tracked files ==="
-          git ls-files | sed -n '1,200p'
-
-      # Node / JS
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
 
-      - name: Install JS dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Run JS tests and generate lcov
+      - name: Run tests and generate coverage
         run: npm run coverage
 
-      - name: Verify JS coverage file
+      - name: Debug: list coverage file
         run: |
-          echo "Coverage directory:"
+          echo "Coverage dir:"
           ls -la coverage || true
-          if [ -f coverage/lcov.info ]; then
-            echo "lcov.info found"
-          else
-            echo "lcov.info missing"
-            exit 1
-          fi
+          if [ -f coverage/lcov.info ]; then echo "lcov found"; else echo "lcov.info missing" && exit 1; fi
 
-      # Python
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install Python dependencies
+      - name: Debug: check SonarQube reachability
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest pytest-cov
-
-      - name: Run Python tests and generate coverage.xml
-        run: |
-          mkdir -p coverage
-          pytest --maxfail=1 --disable-warnings -q --cov=. --cov-report=xml:coverage/coverage.xml
-
-      - name: Verify Python coverage file
-        run: |
-          ls -la coverage || true
-          if [ -f coverage/coverage.xml ]; then
-            echo "coverage.xml found"
-          else
-            echo "coverage.xml missing"
-            # do not fail here if you don't have Python tests; adjust as needed
-          fi
-
-      # Sonar reachability check
-      - name: Check SonarQube reachability
+          echo "Checking SONAR_HOST_URL reachability..."
+          curl -I --max-time 10 "$SONAR_HOST_URL" || (echo "Cannot reach $SONAR_HOST_URL" && exit 1)
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          if [ -z "$SONAR_HOST_URL" ]; then
-            echo "SONAR_HOST_URL secret is not set"
-            exit 1
-          fi
-          echo "Checking reachability for $SONAR_HOST_URL"
-          curl -I --max-time 10 "$SONAR_HOST_URL" || (echo "Cannot reach $SONAR_HOST_URL" && exit 1)
 
-      # SonarQube analysis
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
-        with:
-          projectBaseDir: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          projectBaseDir: .
 
       - name: SonarQube Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@v1
